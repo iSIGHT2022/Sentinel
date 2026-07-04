@@ -1,15 +1,33 @@
-# Sentinel — Android Client
+# Sentinel
 
-The Android app for Sentinel. It uses the phone's camera to capture live video and streams it
-over a WebSocket connection to a backend for monitoring/AI processing.
+Sentinel is an elderly care monitoring system. The idea: place a camera near an elderly
+person (at home or in a care facility), and let software keep an eye on them so caregivers
+don't have to watch a screen all day — it can flag things like a fall or unusual inactivity and
+alert someone who can help.
 
-## What it does
+**This repository holds the Android app** — the camera device side of Sentinel. It doesn't do
+the "AI watching" part itself; its job is to capture video reliably and get it to a backend
+where that analysis happens.
 
-- Shows a live camera preview on screen.
-- Compresses each camera frame to JPEG.
-- Sends frames over a WebSocket connection, with auto-reconnect if the connection drops.
-- Keeps running safely across screen rotations and navigation without leaking memory or camera
-  resources.
+## How it fits together
+
+```
+ [ Android phone/camera ]  --live video over WebSocket-->  [ backend (not in this repo) ]
+   this repository                                            AI monitoring, alerts, etc.
+```
+
+Point a phone's camera at the person being monitored, run this app, and it continuously streams
+what the camera sees to a server for processing.
+
+## What this app does
+
+- Shows a live camera preview on screen, so you can confirm it's pointed the right way.
+- Compresses each camera frame to JPEG so it's small enough to stream.
+- Sends frames over a WebSocket connection to the backend, and automatically reconnects if the
+  connection drops (Wi-Fi hiccups, server restarts, etc.) — important for something meant to run
+  unattended.
+- Keeps running safely across screen rotations and app navigation without leaking memory or
+  leaving the camera locked.
 
 ## Tech stack
 
